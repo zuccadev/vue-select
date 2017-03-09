@@ -22,10 +22,3 @@ Vue Select also accepts a `debounce` prop that can be used to prevent `onSearch`
 #### Library Agnostic
 
 Since Vue.js does not ship with ajax functionality as part of the core library, it's up to you to process the ajax requests in your parent component.
-
-
-#### Example <small>GitHub API</small>
-
-In this example, [Vue Resource](https://github.com/vuejs/vue-resource) is used to access the [GitHub API](https://developer.github.com/v3/).
-
-<git-hub-search-basic></git-hub-search-basic><ajax-example></ajax-example></div>

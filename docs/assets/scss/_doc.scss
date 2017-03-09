@@ -1,0 +1,21 @@
+.doc-row {
+  // padding: 2em 0;
+}
+
+#docs {
+  height: 100vh;
+  padding-top: 4em;
+
+  article *:first-child {
+    margin-top: 0;
+  }
+
+  article a {
+    color: $green;
+
+    &:hover {
+      text-decoration: none;
+      border-bottom: 2px solid $green;
+    }
+  }
+}

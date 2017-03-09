@@ -1,27 +1,32 @@
 <style lang="scss">
-  @import 'assets/scss/_demo.scss';
-  @import 'assets/scss/_cyan_theme.scss';
-  @import 'assets/scss/_prism.scss';
-  @import 'assets/scss/_octicons.scss';
+  @import './assets/scss/docs.scss';
+
+  #sidebar nav {
+    // position: fixed;
+    // top: 0;
+  }
 </style>
 
 <template>
   <div id="docs" class="container-fluid">
-    <div class="col-md-2 col-md-offset-1">
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#">Install &amp; Usage</a></li>
-        <li><a href="#">Examples</a></li>
-        <li><a href="#">Ajax</a></li>
-        <li><a href="#">Parameters</a></li>
-      </ul>
+    <div class="col-md-3" id="sidebar">
+      <nav>
+        <div class="form-group">
+          <label class="control-label">Version</label>
+          <v-select id="select-version" v-model="version" :searchable="false" :options="versions"></v-select>
+        </div>
+        <p v-if="version.v == 'v1'"><small><code>v1.x</code> of <code>vue-select</code> should be used with <code>vue 1.x</code></small></p>
+        <sidebar></sidebar>
+      </nav>
     </div>
     <div class="col-md-7">
-      <article v-html="install"></article>
-      <article v-html="vModel"></article>
+      <article v-html="getDocHtml('install')"></article>
+      <v-select v-model="selected" :options="['foo','bar']"></v-select>
+      <!-- <article v-html="vModel"></article>
       <article v-html="single"></article>
       <article v-html="reactive"></article>
       <article v-html="labels"></article>
-      <article v-html="ajax"></article>
+      <article v-html="ajax"></article> -->
     </div>
   </div>
 </template>
@@ -38,17 +43,39 @@
 // import Params from './components/Params.vue'
 // import Ajax from './components/snippets/Ajax.vue'
 
+const docs = {
+  'v1.x': {
+    install: require('./md/v2/install/Install.md'),
+    vModel: require('./md/VModel.md'),
+    single: require('./md/SingleMultiple.md'),
+    reactive: require('./md/ReactiveOptions.md'),
+    labels: require('./md/CustomLabels.md'),
+    ajax: require('./md/Ajax.md'),
+  },
+  'v2.x': {
+    install: require('./md/v2/install/Install.md'),
+    vModel: require('./md/VModel.md'),
+    single: require('./md/SingleMultiple.md'),
+    reactive: require('./md/ReactiveOptions.md'),
+    labels: require('./md/CustomLabels.md'),
+    ajax: require('./md/Ajax.md'),
+  }
+}
+
 export default {
   // components: { Params, Examples, Ajax }
   data () {
     return {
-      install: require('./md/Install.md'),
-      vModel: require('./md/VModel.md'),
-      single: require('./md/SingleMultiple.md'),
-      reactive: require('./md/ReactiveOptions.md'),
-      labels: require('./md/CustomLabels.md'),
-      ajax: require('./md/Ajax.md'),
+      docs,
+      versions: ['v1.x','v2.x'],
+      version: 'v2.x'
     }
   },
+
+  methods: {
+    getDocHtml(doc) {
+      return this.docs[this.version][doc]
+    }
+  }
 }
 </script>
