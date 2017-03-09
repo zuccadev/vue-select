@@ -249,6 +249,45 @@ describe('Select.vue', () => {
 			expect(vm.$children[0].isOptionSelected('foo')).toEqual(true)
 		}),
 
+		fit('can select an object from a set of options containing objects', (done) => {
+			const vm = new Vue({
+				template: `<div><v-select :options="[{label: 'foo', value: 'bar'}]"></v-select></div>`,
+			}).$mount()
+			vm.$children[0].select({label: 'foo', value: 'bar'})
+			Vue.nextTick(() => {
+				expect(vm.$children[0].mutableValue).toEqual({label: 'foo', value: 'bar'})
+				done()
+			})
+		}),
+
+		fit('can select a given key from a set of options containing objects', (done) => {
+			const vm = new Vue({
+				template: `<div><v-select model="value" :options="[{label: 'foo', value: 'bar'}]"></v-select></div>`,
+			}).$mount()
+			// spyOn(vm.$children[0], '$emit')
+			vm.$children[0].select({label: 'foo', value: 'bar'})
+			Vue.nextTick(() => {
+				// expect(vm.$children[0].$emit).toHaveBeenCalled('bar')
+				// expect(vm.$children[0].value).toEqual('bar')
+				expect(vm.$children[0].mutableValue).toEqual('bar')
+				done()
+			})
+		}),
+
+		fit('can deselect a given key from a set of options containing objects', (done) => {
+			const vm = new Vue({
+				template: `<div><v-select :value="'bar'" model="value" :options="[{label: 'foo', value: 'bar'}]"></v-select></div>`,
+			}).$mount()
+			// spyOn(vm.$children[0], '$emit')
+			vm.$children[0].select({label: 'foo', value: 'bar'})
+			Vue.nextTick(() => {
+				// expect(vm.$children[0].$emit).toHaveBeenCalled('bar')
+				// expect(vm.$children[0].value).toEqual('bar')
+				expect(vm.$children[0].mutableValue).toEqual(null)
+				done()
+			})
+		}),
+
 		describe('change Event', () => {
 			it('will trigger the input event when the selection changes', (done) => {
 				const vm = new Vue({
