@@ -251,6 +251,7 @@
     <div ref="toggle" @mousedown.prevent="toggleDropdown" class="dropdown-toggle">
 
       <span class="selected-tag" v-for="option in valueAsArray" v-bind:key="option.index">
+      <span v-if="option.slug" :class="option.slug" class="icona-mondo"></span>
         {{ getOptionLabel(option) }}
         <button v-if="multiple" @click="deselect(option)" type="button" class="close">
           <span aria-hidden="true">&times;</span>
@@ -285,6 +286,7 @@
       <ul ref="dropdownMenu" v-if="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }">
         <li v-for="(option, index) in filteredOptions" v-bind:key="index" :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }" @mouseover="typeAheadPointer = index">
           <a @mousedown.prevent="select(option)">
+	     <span v-if="option.slug" :class="option.slug" class="icona-mondo inside-select"></span>
             {{ getOptionLabel(option) }}
           </a>
         </li>
