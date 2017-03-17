@@ -244,10 +244,10 @@
   .fade-leave-to {
     opacity: 0;
   }
-  .openMask{
+  .open-mask{
     position: absolute;
     display: block;
-    background: red;
+    background: transparent;
     width: 100%;
     height: 100%;
     left: 0;
