@@ -244,6 +244,14 @@
   .fade-leave-to {
     opacity: 0;
   }
+  .openMask{
+    position: absolute;
+    display: block;
+    background: red;
+    width: 100%;
+    height: 100%;
+    left: 0;
+  }
 </style>
 
 <template>
@@ -251,15 +259,14 @@
     <div ref="toggle" @mousedown.prevent="toggleDropdown" class="dropdown-toggle">
 
       <span class="selected-tag" v-for="option in valueAsArray" v-bind:key="option.index">
-      <span v-if="option.slug" :class="option.slug" class="icona-mondo"></span>
+        <span v-if="option.slug" :class="option.slug" class="icona-mondo"></span>
         {{ getOptionLabel(option) }}
         <button v-if="multiple" @click="deselect(option)" type="button" class="close">
           <span aria-hidden="true">&times;</span>
         </button>
       </span>
 
-      <input
-              ref="search"
+      <input  ref="search"
               v-model="search"
               @keydown.delete="maybeDeleteValue"
               @keyup.esc="onEscape"
@@ -275,6 +282,8 @@
               :style="{ width: isValueEmpty ? '100%' : 'auto' }"
       >
 
+      <i class="open-mask" ref="openMask"></i>
+
       <i v-if="!noDrop" ref="openIndicator" role="presentation" class="open-indicator"></i>
 
       <slot name="spinner">
@@ -283,10 +292,10 @@
     </div>
 
     <transition :name="transition">
-      <ul ref="dropdownMenu" v-if="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }">
+      <ul ref="dropdownMenu" v-show="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }">
         <li v-for="(option, index) in filteredOptions" v-bind:key="index" :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }" @mouseover="typeAheadPointer = index">
           <a @mousedown.prevent="select(option)">
-	     <span v-if="option.slug" :class="option.slug" class="icona-mondo inside-select"></span>
+       <span v-if="option.slug" :class="option.slug" class="icona-mondo inside-select"></span>
             {{ getOptionLabel(option) }}
           </a>
         </li>
@@ -488,19 +497,19 @@
         open: false,
         mutableValue: null,
         mutableOptions: [],
-				mutableLoading: false
+        mutableLoading: false
       }
     },
 
     watch: {
       /**
        * When the value prop changes, update
-			 * the internal mutableValue.
+       * the internal mutableValue.
        * @param  {mixed} val
        * @return {void}
        */
       value(val) {
-				this.mutableValue = val
+        this.mutableValue = val
       },
 
       /**
@@ -509,7 +518,7 @@
        * @param  {string|object} old
        * @return {void}
        */
-			mutableValue(val, old) {
+      mutableValue(val, old) {
         if (this.multiple) {
           this.onChange ? this.onChange(val, this) : null
         } else {
@@ -528,24 +537,24 @@
       },
 
       /**
-			 * Maybe reset the mutableValue
+       * Maybe reset the mutableValue
        * when mutableOptions change.
        * @return {[type]} [description]
        */
       mutableOptions() {
         if (!this.taggable && this.resetOnOptionsChange) {
-					this.mutableValue = this.multiple ? [] : null
+          this.mutableValue = this.multiple ? [] : null
         }
       },
 
       /**
-			 * Always reset the mutableValue when
+       * Always reset the mutableValue when
        * the multiple prop changes.
        * @param  {Boolean} val
        * @return {void}
        */
       multiple(val) {
-				this.mutableValue = val ? [] : null
+        this.mutableValue = val ? [] : null
       }
     },
 
@@ -554,9 +563,9 @@
      * attach any event listeners.
      */
     created() {
-			this.mutableValue = this.value
+      this.mutableValue = this.value
       this.mutableOptions = this.options.slice(0)
-			this.mutableLoading = this.loading
+      this.mutableLoading = this.loading
 
       this.$on('option:created', this.maybePushTag)
     },
@@ -630,7 +639,8 @@
        * @return {void}
        */
       toggleDropdown(e) {
-        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el) {
+        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el || 
+          e.target === this.$refs.openMask) {
           if (this.open) {
             this.$refs.search.blur() // dropdown will close on blur
           } else {
@@ -829,7 +839,6 @@
 
         return []
       }
-    },
-
+    }
   }
 </script>
