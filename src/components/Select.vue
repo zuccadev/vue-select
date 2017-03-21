@@ -281,8 +281,8 @@
               :readonly="!searchable"
               :style="{ width: isValueEmpty ? '100%' : 'auto' }"
       >
-
-      <i class="open-mask" ref="openMask"></i>
+      
+      <i v-if="mutableTapping" class="open-mask" ref="openMask"></i> 
 
       <i v-if="!noDrop" ref="openIndicator" role="presentation" class="open-indicator"></i>
 
@@ -488,6 +488,15 @@
       noDrop: {
         type: Boolean,
         default: false
+      },
+      /**
+       * Enables tapping in all the droppdown-toggle surface
+       * becomes false when 'multiple' prop is true
+       * @type {Boolean}
+       */
+      fullTapping: {
+        type: Boolean,
+        default: true
       }
     },
 
@@ -497,7 +506,8 @@
         open: false,
         mutableValue: null,
         mutableOptions: [],
-        mutableLoading: false
+        mutableLoading: false,
+        mutableTapping: true
       }
     },
 
@@ -566,6 +576,7 @@
       this.mutableValue = this.value
       this.mutableOptions = this.options.slice(0)
       this.mutableLoading = this.loading
+      this.mutableTapping = !this.multiple
 
       this.$on('option:created', this.maybePushTag)
     },
@@ -639,8 +650,7 @@
        * @return {void}
        */
       toggleDropdown(e) {
-        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el || 
-          e.target === this.$refs.openMask) {
+        if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el || e.target === this.$refs.openMask) {
           if (this.open) {
             this.$refs.search.blur() // dropdown will close on blur
           } else {
@@ -656,6 +666,7 @@
        * @return {Boolean}        True when selected | False otherwise
        */
       isOptionSelected(option) {
+
         if (this.multiple && this.mutableValue) {
           let selected = false
           this.mutableValue.forEach(opt => {
@@ -839,6 +850,7 @@
 
         return []
       }
-    }
+    },
+
   }
 </script>
