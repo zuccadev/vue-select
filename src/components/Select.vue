@@ -295,7 +295,7 @@
       <ul ref="dropdownMenu" v-show="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }">
         <li v-for="(option, index) in filteredOptions" v-bind:key="index" :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }" @mouseover="typeAheadPointer = index">
           <a @mousedown.prevent="select(option)">
-       <span v-if="option.slug" :class="option.slug" class="icona-mondo inside-select"></span>
+            <span v-if="option.slug" :class="option.slug" class="icona-mondo inside-select"></span>
             {{ getOptionLabel(option) }}
           </a>
         </li>
@@ -589,9 +589,13 @@
        * @return {void}
        */
       select(option) {
-        if (this.isOptionSelected(option)) {
+        /**
+         * COMMENTATO deselect(option) perchè inutile 
+         * e dava errore con select multiple generate con v-for
+         **/
+        /*if (this.isOptionSelected(option)) {
           this.deselect(option)
-        } else {
+        } else {*/
           if (this.taggable && !this.optionExists(option)) {
             option = this.createOption(option)
           }
@@ -603,7 +607,7 @@
           } else {
             this.mutableValue = option
           }
-        }
+        //}
 
         this.onAfterSelect(option)
       },
